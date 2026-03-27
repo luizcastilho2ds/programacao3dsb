@@ -1,0 +1,1 @@
+CREATE TABLE Clientes (\n    id INT PRIMARY KEY,\n    nome VARCHAR(100) NOT NULL,\n    email VARCHAR(100) UNIQUE NOT NULL,\n    telefone VARCHAR(15)\n);\n\nCREATE TABLE Compras (\n    id INT PRIMARY KEY,\n    data_compra DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    cliente_id INT,\n    FOREIGN KEY (cliente_id) REFERENCES Clientes(id)\n);
