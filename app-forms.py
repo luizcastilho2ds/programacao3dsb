@@ -22,7 +22,7 @@ conexao.commit()
 
 
 # -------------------------
-# FUNÇÃO SALVAR
+# FUNÇÃO SALVAR CLIENTE
 # -------------------------
 
 def salvar_cliente():
@@ -55,7 +55,7 @@ def salvar_cliente():
 
 
 # -------------------------
-# FUNÇÃO LIMPAR
+# FUNÇÃO LIMPAR FORMULÁRIO
 # -------------------------
 
 def limpar_formulario():
@@ -67,12 +67,77 @@ def limpar_formulario():
 
 
 # -------------------------
+# FUNÇÃO VISUALIZAR CLIENTES
+# -------------------------
+
+def visualizar_clientes():
+
+    # Cria uma nova janela
+    janela_clientes = tk.Toplevel(janela)
+
+    janela_clientes.title("Clientes Cadastrados")
+    janela_clientes.geometry("600x400")
+
+    # Título
+    tk.Label(
+        janela_clientes,
+        text="Clientes Cadastrados",
+        font=("Arial", 18, "bold")
+    ).pack(pady=15)
+
+    # Área onde os clientes serão exibidos
+    lista_clientes = tk.Text(
+        janela_clientes,
+        width=70,
+        height=15
+    )
+
+    lista_clientes.pack(padx=10, pady=10)
+
+    # Busca todos os clientes no banco
+    cursor.execute("""
+        SELECT id, nome, email, telefone
+        FROM clientes
+    """)
+
+    clientes = cursor.fetchall()
+
+    # Verifica se existem clientes
+    if len(clientes) == 0:
+        lista_clientes.insert(
+            tk.END,
+            "Nenhum cliente cadastrado."
+        )
+    else:
+        # Exibe os clientes
+        for cliente in clientes:
+
+            id_cliente = cliente[0]
+            nome = cliente[1]
+            email = cliente[2]
+            telefone = cliente[3]
+
+            lista_clientes.insert(
+                tk.END,
+                f"ID: {id_cliente}\n"
+                f"Nome: {nome}\n"
+                f"E-mail: {email}\n"
+                f"Telefone: {telefone}\n"
+                f"{'-' * 50}\n"
+            )
+
+    # Impede que o usuário altere os dados exibidos
+    lista_clientes.config(state=tk.DISABLED)
+
+
+# -------------------------
 # JANELA PRINCIPAL
 # -------------------------
 
 janela = tk.Tk()
+
 janela.title("Cadastro de Clientes")
-janela.geometry("400x300")
+janela.geometry("400x350")
 janela.resizable(False, False)
 
 
@@ -90,7 +155,7 @@ titulo.pack(pady=20)
 
 
 # -------------------------
-# NOME
+# CAMPO NOME
 # -------------------------
 
 tk.Label(
@@ -107,7 +172,7 @@ entrada_nome.pack(pady=5)
 
 
 # -------------------------
-# E-MAIL
+# CAMPO E-MAIL
 # -------------------------
 
 tk.Label(
@@ -124,7 +189,7 @@ entrada_email.pack(pady=5)
 
 
 # -------------------------
-# TELEFONE
+# CAMPO TELEFONE
 # -------------------------
 
 tk.Label(
@@ -147,6 +212,8 @@ entrada_telefone.pack(pady=5)
 frame_botoes = tk.Frame(janela)
 frame_botoes.pack(pady=20)
 
+
+# Botão Salvar
 botao_salvar = tk.Button(
     frame_botoes,
     text="Salvar",
@@ -154,9 +221,10 @@ botao_salvar = tk.Button(
     command=salvar_cliente
 )
 
-botao_salvar.grid(row=0, column=0, padx=10)
+botao_salvar.grid(row=0, column=0, padx=5)
 
 
+# Botão Limpar
 botao_limpar = tk.Button(
     frame_botoes,
     text="Limpar",
@@ -164,7 +232,18 @@ botao_limpar = tk.Button(
     command=limpar_formulario
 )
 
-botao_limpar.grid(row=0, column=1, padx=10)
+botao_limpar.grid(row=0, column=1, padx=5)
+
+
+# Botão Visualizar Clientes
+botao_visualizar = tk.Button(
+    janela,
+    text="Visualizar Clientes",
+    width=25,
+    command=visualizar_clientes
+)
+
+botao_visualizar.pack(pady=5)
 
 
 # -------------------------
@@ -174,5 +253,5 @@ botao_limpar.grid(row=0, column=1, padx=10)
 janela.mainloop()
 
 
-# Fecha o banco quando o programa terminar
+# Fecha o banco de dados
 conexao.close()
