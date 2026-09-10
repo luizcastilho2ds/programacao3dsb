@@ -1,0 +1,607 @@
+<!DOCTYPE html> <html lang="pt-BR"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadastro de Clientes</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 30px;
+    }
+
+    .container {
+        width: 500px;
+        max-width: 100%;
+        margin: auto;
+        background-color: white;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+    }
+
+    h3 {
+        color: #444;
+        margin-top: 25px;
+    }
+
+    label {
+        display: block;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    input,
+    select {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 15px;
+    }
+
+    select {
+        height: 130px;
+    }
+
+    .botoes {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    button {
+        flex: 1;
+        padding: 11px;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+    #btnBuscar {
+        background-color: #6c757d;
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    #btnIncluir {
+        background-color: #28a745;
+    }
+
+    #btnAlterar {
+        background-color: #007bff;
+    }
+
+    button:hover {
+        opacity: 0.9;
+    }
+
+    #mensagem {
+        display: none;
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 4px;
+        text-align: center;
+    }
+
+    .sucesso {
+        display: block !important;
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .erro {
+        display: block !important;
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+</style>
+
+</head> <body>
+<div class="container">
+
+    <h2>Cadastro de Clientes</h2>
+
+    <!-- LISTA DE CLIENTES -->
+    <label for="listBoxClientes">Clientes:</label>
+
+    <select id="listBoxClientes" size="5"></select>
+
+    <button id="btnBuscar" type="button" onclick="buscarCliente()">
+        Buscar Cliente
+    </button>
+
+
+    <!-- DADOS DO CLIENTE -->
+    <h3>Dados do Cliente</h3>
+
+    <label for="txtNome">Nome:</label>
+    <input
+        type="text"
+        id="txtNome"
+        placeholder="Digite o nome"
+    >
+
+    <label for="txtEndereco">Endereço:</label>
+    <input
+        type="text"
+        id="txtEndereco"
+        placeholder="Digite o endereço"
+    >
+
+    <label for="txtTelefone">Telefone:</label>
+    <input
+        type="text"
+        id="txtTelefone"
+        placeholder="Digite o telefone"
+    >
+
+    <label for="txtEmail">E-mail:</label>
+    <input
+        type="email"
+        id="txtEmail"
+        placeholder="Digite o e-mail"
+    >
+
+
+    <!-- BOTÕES -->
+    <div class="botoes">
+
+        <button
+            id="btnIncluir"
+            type="button"
+            onclick="incluirCliente()"
+        >
+            Incluir Cliente
+        </button>
+
+        <button
+            id="btnAlterar"
+            type="button"
+            onclick="alterarCliente()"
+        >
+            Alterar Cliente
+        </button>
+
+    </div>
+
+
+    <!-- MENSAGEM -->
+    <div id="mensagem"></div>
+
+</div>
+
+
+<script>
+
+    // =========================================================
+    // VARIÁVEL PRINCIPAL
+    // =========================================================
+
+    let clientes = [];
+
+
+    // =========================================================
+    // CARREGAR CLIENTES DO LOCALSTORAGE
+    // =========================================================
+
+    function carregarClientes() {
+
+        const dadosSalvos = localStorage.getItem("clientes");
+
+        if (dadosSalvos) {
+
+            clientes = JSON.parse(dadosSalvos);
+
+        } else {
+
+            // Clientes iniciais
+            clientes = [
+                {
+                    id: 1,
+                    nome: "João Silva",
+                    endereco: "Rua A",
+                    telefone: "123456",
+                    email: "joao@gmail.com"
+                },
+                {
+                    id: 2,
+                    nome: "Maria Oliveira",
+                    endereco: "Rua B",
+                    telefone: "654321",
+                    email: "maria@gmail.com"
+                }
+            ];
+
+            salvarClientes();
+        }
+
+        atualizarLista();
+    }
+
+
+    // =========================================================
+    // SALVAR CLIENTES NO LOCALSTORAGE
+    // =========================================================
+
+    function salvarClientes() {
+
+        localStorage.setItem(
+            "clientes",
+            JSON.stringify(clientes)
+        );
+    }
+
+
+    // =========================================================
+    // ATUALIZAR LISTA
+    // =========================================================
+
+    function atualizarLista() {
+
+        const lista = document.getElementById("listBoxClientes");
+
+        // Limpa a lista
+        lista.innerHTML = "";
+
+        // Adiciona os clientes
+        clientes.forEach(function(cliente) {
+
+            const option = document.createElement("option");
+
+            option.value = cliente.id;
+
+            option.textContent =
+                cliente.id + " - " + cliente.nome;
+
+            lista.appendChild(option);
+        });
+    }
+
+
+    // =========================================================
+    // GERAR NOVO ID
+    // =========================================================
+
+    function gerarNovoId() {
+
+        if (clientes.length === 0) {
+            return 1;
+        }
+
+        let maiorId = 0;
+
+        clientes.forEach(function(cliente) {
+
+            if (cliente.id > maiorId) {
+                maiorId = cliente.id;
+            }
+
+        });
+
+        return maiorId + 1;
+    }
+
+
+    // =========================================================
+    // VALIDAR CAMPOS
+    // =========================================================
+
+    function validarCampos() {
+
+        const nome =
+            document.getElementById("txtNome").value.trim();
+
+        const endereco =
+            document.getElementById("txtEndereco").value.trim();
+
+        const telefone =
+            document.getElementById("txtTelefone").value.trim();
+
+        const email =
+            document.getElementById("txtEmail").value.trim();
+
+
+        // Verifica campos vazios
+        if (
+            nome === "" ||
+            endereco === "" ||
+            telefone === "" ||
+            email === ""
+        ) {
+
+            mostrarMensagem(
+                "Preencha todos os campos antes de salvar.",
+                "erro"
+            );
+
+            return false;
+        }
+
+
+        // Validação básica do e-mail
+        const emailValido =
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailValido.test(email)) {
+
+            mostrarMensagem(
+                "Digite um e-mail válido.",
+                "erro"
+            );
+
+            return false;
+        }
+
+
+        return true;
+    }
+
+
+    // =========================================================
+    // INCLUIR CLIENTE
+    // =========================================================
+
+    function incluirCliente() {
+
+        // Primeiro valida os campos
+        if (!validarCampos()) {
+            return;
+        }
+
+
+        // Cria um novo cliente
+        const novoCliente = {
+
+            id: gerarNovoId(),
+
+            nome:
+                document.getElementById("txtNome")
+                .value
+                .trim(),
+
+            endereco:
+                document.getElementById("txtEndereco")
+                .value
+                .trim(),
+
+            telefone:
+                document.getElementById("txtTelefone")
+                .value
+                .trim(),
+
+            email:
+                document.getElementById("txtEmail")
+                .value
+                .trim()
+        };
+
+
+        // Adiciona o cliente ao array
+        clientes.push(novoCliente);
+
+
+        // Salva no localStorage
+        salvarClientes();
+
+
+        // Atualiza a lista automaticamente
+        atualizarLista();
+
+
+        // Seleciona o novo cliente
+        document.getElementById("listBoxClientes").value =
+            novoCliente.id;
+
+
+        // Mostra mensagem
+        mostrarMensagem(
+            "Cliente incluído com sucesso!",
+            "sucesso"
+        );
+    }
+
+
+    // =========================================================
+    // BUSCAR CLIENTE
+    // =========================================================
+
+    function buscarCliente() {
+
+        const lista =
+            document.getElementById("listBoxClientes");
+
+        // Verifica se algum cliente foi selecionado
+        if (lista.value === "") {
+
+            mostrarMensagem(
+                "Selecione um cliente na lista.",
+                "erro"
+            );
+
+            return;
+        }
+
+
+        const idSelecionado =
+            Number(lista.value);
+
+
+        // Procura o cliente
+        const cliente =
+            clientes.find(function(c) {
+
+                return c.id === idSelecionado;
+
+            });
+
+
+        if (!cliente) {
+
+            mostrarMensagem(
+                "Cliente não encontrado.",
+                "erro"
+            );
+
+            return;
+        }
+
+
+        // Preenche os campos
+        document.getElementById("txtNome").value =
+            cliente.nome;
+
+        document.getElementById("txtEndereco").value =
+            cliente.endereco;
+
+        document.getElementById("txtTelefone").value =
+            cliente.telefone;
+
+        document.getElementById("txtEmail").value =
+            cliente.email;
+
+
+        mostrarMensagem(
+            "Dados do cliente carregados.",
+            "sucesso"
+        );
+    }
+
+
+    // =========================================================
+    // ALTERAR CLIENTE
+    // =========================================================
+
+    function alterarCliente() {
+
+        const lista =
+            document.getElementById("listBoxClientes");
+
+
+        // Verifica se existe cliente selecionado
+        if (lista.value === "") {
+
+            mostrarMensagem(
+                "Selecione um cliente para alterar.",
+                "erro"
+            );
+
+            return;
+        }
+
+
+        // Valida os campos
+        if (!validarCampos()) {
+            return;
+        }
+
+
+        const idSelecionado =
+            Number(lista.value);
+
+
+        // Localiza o índice do cliente
+        const indice =
+            clientes.findIndex(function(cliente) {
+
+                return cliente.id === idSelecionado;
+
+            });
+
+
+        if (indice === -1) {
+
+            mostrarMensagem(
+                "Cliente não encontrado.",
+                "erro"
+            );
+
+            return;
+        }
+
+
+        // Atualiza os dados
+        clientes[indice].nome =
+            document.getElementById("txtNome")
+            .value
+            .trim();
+
+        clientes[indice].endereco =
+            document.getElementById("txtEndereco")
+            .value
+            .trim();
+
+        clientes[indice].telefone =
+            document.getElementById("txtTelefone")
+            .value
+            .trim();
+
+        clientes[indice].email =
+            document.getElementById("txtEmail")
+            .value
+            .trim();
+
+
+        // Salva as alterações
+        salvarClientes();
+
+
+        // Atualiza a lista automaticamente
+        atualizarLista();
+
+
+        // Mantém o cliente selecionado
+        lista.value = idSelecionado;
+
+
+        mostrarMensagem(
+            "Cliente alterado com sucesso!",
+            "sucesso"
+        );
+    }
+
+
+    // =========================================================
+    // MOSTRAR MENSAGEM
+    // =========================================================
+
+    function mostrarMensagem(texto, tipo) {
+
+        const elemento =
+            document.getElementById("mensagem");
+
+
+        elemento.textContent = texto;
+
+        elemento.className = tipo;
+
+
+        // Remove a mensagem depois de 3 segundos
+        setTimeout(function() {
+
+            elemento.textContent = "";
+
+            elemento.className = "";
+
+        }, 3000);
+    }
+
+
+    // =========================================================
+    // INICIAR SISTEMA
+    // =========================================================
+
+    carregarClientes();
+
+</script>
+
+</body> </html>
