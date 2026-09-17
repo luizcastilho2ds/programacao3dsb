@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qual o seu Time do Coração?</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #ffffff;
+        }
+
+        h1 {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 36px;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        select {
+            font-size: 14px;
+            padding: 2px;
+            width: 150px;
+        }
+
+        button {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            padding: 2px 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Qual o seu Time do Coração?</h1>
+
+    <form id="meuFormulario">
+        <div class="form-container">
+            <select id="time" name="time">
+                <option value="Botafogo">Botafogo</option>
+                <option value="Flamengo">Flamengo</option>
+                <option value="Fluminense">Fluminense</option>
+                <option value="Vasco da Gama">Vasco da Gama</option>
+            </select>
+
+            <button type="button" onclick="enviarFormulario()">Enviar</button>
+            <button type="button" onclick="cancelarFormulario()">Cancelar</button>
+        </div>
+    </form>
+
+    <script>
+        function enviarFormulario() {
+            var select = document.getElementById("time");
+            var timeSelecionado = select.options[select.selectedIndex].value;
+            
+            // Exibe uma caixa de diálogo (alert) com o time selecionado
+            alert("Você selecionou o time: " + timeSelecionado);
+        }
+
+        function cancelarFormulario() {
+            // Reseta a seleção para a primeira opção ou realiza outra ação
+            document.getElementById("meuFormulario").reset();
+            alert("Ação cancelada!");
+        }
+    </script>
+
+</body>
+</html>
