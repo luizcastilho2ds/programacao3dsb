@@ -1,59 +1,325 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestão de Clientes</title>
-</head>
-<body>
-  <h2>Cadastro de Clientes</h2>
-  <input id="nome" placeholder="Nome" />
-  <input id="endereco" placeholder="Endereço" />
-  <input id="telefone" placeholder="Telefone" />
-  <button onclick="adicionarCliente()">Adicionar</button>
 
-  <h3>Lista de Clientes</h3>
-  <ul id="listaClientes"></ul>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #eef2ff, #f8fafc);
+      color: #1e293b;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.10);
+      margin-bottom: 25px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #334155;
+      margin-bottom: 25px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #334155;
+      margin-bottom: 18px;
+      font-size: 20px;
+    }
+
+    .formulario {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px 15px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+      transition: 0.2s;
+      background-color: #f8fafc;
+    }
+
+    input:focus {
+      border-color: #6366f1;
+      background-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+    }
+
+    .btn-adicionar {
+      border: none;
+      padding: 13px;
+      border-radius: 10px;
+      background: #6366f1;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-adicionar:hover {
+      background: #4f46e5;
+      transform: translateY(-1px);
+    }
+
+    #listaClientes {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    #listaClientes li {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      transition: 0.2s;
+    }
+
+    #listaClientes li:hover {
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+      border-color: #c7d2fe;
+    }
+
+    .dados-cliente {
+      flex: 1;
+      line-height: 1.6;
+    }
+
+    .dados-cliente strong {
+      color: #1e293b;
+      font-size: 16px;
+    }
+
+    .dados-cliente span {
+      display: block;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .acoes {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-editar,
+    .btn-excluir {
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    .btn-editar {
+      background: #e0e7ff;
+      color: #4338ca;
+    }
+
+    .btn-editar:hover {
+      background: #c7d2fe;
+    }
+
+    .btn-excluir {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .btn-excluir:hover {
+      background: #fecaca;
+    }
+
+    .lista-vazia {
+      text-align: center;
+      color: #94a3b8;
+      padding: 20px;
+      border: 1px dashed #cbd5e1;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 20px 12px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      #listaClientes li {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .acoes {
+        width: 100%;
+      }
+
+      .btn-editar,
+      .btn-excluir {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="card">
+      <h2>Cadastro de Clientes</h2>
+
+      <div class="formulario">
+        <input id="nome" placeholder="Nome" />
+        <input id="endereco" placeholder="Endereço" />
+        <input id="telefone" placeholder="Telefone" />
+
+        <button class="btn-adicionar" onclick="adicionarCliente()">
+          Adicionar Cliente
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Lista de Clientes</h3>
+
+      <ul id="listaClientes"></ul>
+    </div>
+
+  </div>
 
   <script>
     function carregarClientes() {
       const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
       const lista = document.getElementById('listaClientes');
+
       lista.innerHTML = '';
+
+      if (clientes.length === 0) {
+        lista.innerHTML = `
+          <li class="lista-vazia">
+            Nenhum cliente cadastrado.
+          </li>
+        `;
+        return;
+      }
+
       clientes.forEach((cliente, index) => {
         const item = document.createElement('li');
-        item.textContent = `${cliente.nome} - ${cliente.endereco} - ${cliente.telefone}`;
-        item.innerHTML += ` <button onclick="editarCliente(${index})">Editar</button>
-                            <button onclick="excluirCliente(${index})">Excluir</button>`;
+
+        item.innerHTML = `
+          <div class="dados-cliente">
+            <strong>${cliente.nome}</strong>
+            <span>📍 ${cliente.endereco}</span>
+            <span>📞 ${cliente.telefone}</span>
+          </div>
+
+          <div class="acoes">
+            <button class="btn-editar" onclick="editarCliente(${index})">
+              Editar
+            </button>
+
+            <button class="btn-excluir" onclick="excluirCliente(${index})">
+              Excluir
+            </button>
+          </div>
+        `;
+
         lista.appendChild(item);
       });
     }
 
     function adicionarCliente() {
-      const nome = document.getElementById('nome').value;
-      const endereco = document.getElementById('endereco').value;
-      const telefone = document.getElementById('telefone').value;
+      const nome = document.getElementById('nome').value.trim();
+      const endereco = document.getElementById('endereco').value.trim();
+      const telefone = document.getElementById('telefone').value.trim();
+
+      if (!nome || !endereco || !telefone) {
+        alert('Preencha todos os campos.');
+        return;
+      }
+
       const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
-      clientes.push({ nome, endereco, telefone });
+
+      clientes.push({
+        nome,
+        endereco,
+        telefone
+      });
+
       localStorage.setItem('clientes', JSON.stringify(clientes));
+
+      limparFormulario();
       carregarClientes();
     }
 
     function excluirCliente(index) {
-      const clientes = JSON.parse(localStorage.getItem('clientes'));
+      const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+
       clientes.splice(index, 1);
+
       localStorage.setItem('clientes', JSON.stringify(clientes));
+
       carregarClientes();
     }
 
     function editarCliente(index) {
-      const clientes = JSON.parse(localStorage.getItem('clientes'));
+      const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
       const cliente = clientes[index];
+
       document.getElementById('nome').value = cliente.nome;
       document.getElementById('endereco').value = cliente.endereco;
       document.getElementById('telefone').value = cliente.telefone;
-      excluirCliente(index);
+
+      clientes.splice(index, 1);
+
+      localStorage.setItem('clientes', JSON.stringify(clientes));
+
+      carregarClientes();
+
+      document.getElementById('nome').focus();
+    }
+
+    function limparFormulario() {
+      document.getElementById('nome').value = '';
+      document.getElementById('endereco').value = '';
+      document.getElementById('telefone').value = '';
     }
 
     carregarClientes();
   </script>
+
 </body>
 </html>
