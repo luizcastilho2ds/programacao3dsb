@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestão de Clientes</title>
+
+  <title>Gestão de Clientes - V2</title>
 
   <style>
+
+    /* ==============================
+       CONFIGURAÇÕES GERAIS
+    ============================== */
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -14,131 +21,452 @@
 
     body {
       font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(135deg, #eef2ff, #f8fafc);
-      color: #1e293b;
       min-height: 100vh;
-      padding: 40px 20px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #eef2ff,
+          #f8fafc
+        );
+
+      color: #1e293b;
+      padding: 35px 20px;
     }
 
     .container {
       width: 100%;
-      max-width: 700px;
+      max-width: 850px;
       margin: 0 auto;
     }
 
+
+    /* ==============================
+       CABEÇALHO
+    ============================== */
+
+    .cabecalho {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .cabecalho h1 {
+      font-size: 32px;
+      color: #1e293b;
+      margin-bottom: 8px;
+    }
+
+    .cabecalho p {
+      color: #64748b;
+      font-size: 15px;
+    }
+
+
+    /* ==============================
+       CARD
+    ============================== */
+
     .card {
       background: #ffffff;
-      padding: 30px;
       border-radius: 18px;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.10);
-      margin-bottom: 25px;
+      padding: 28px;
+
+      margin-bottom: 22px;
+
+      box-shadow:
+        0 10px 30px rgba(15, 23, 42, 0.09);
+
+      border: 1px solid #e2e8f0;
     }
 
-    h2 {
-      text-align: center;
-      color: #334155;
-      margin-bottom: 25px;
-      font-size: 28px;
+
+    /* ==============================
+       TÍTULOS
+    ============================== */
+
+    .titulo-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      gap: 15px;
+
+      margin-bottom: 22px;
     }
 
-    h3 {
+    .titulo-card h2 {
+      font-size: 21px;
       color: #334155;
-      margin-bottom: 18px;
-      font-size: 20px;
     }
+
+
+    /* ==============================
+       INDICADOR DE EDIÇÃO
+    ============================== */
+
+    .status-edicao {
+      display: none;
+
+      background: #fef3c7;
+      color: #92400e;
+
+      padding: 7px 12px;
+
+      border-radius: 20px;
+
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .status-edicao.ativo {
+      display: inline-block;
+    }
+
+
+    /* ==============================
+       FORMULÁRIO
+    ============================== */
 
     .formulario {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 15px;
     }
 
-    input {
+    .campo {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .campo label {
+      color: #475569;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .campo input {
       width: 100%;
+
       padding: 13px 15px;
+
       border: 1px solid #cbd5e1;
       border-radius: 10px;
+
+      background: #f8fafc;
+
       font-size: 15px;
+
       outline: none;
+
       transition: 0.2s;
-      background-color: #f8fafc;
     }
 
-    input:focus {
+    .campo input:focus {
       border-color: #6366f1;
-      background-color: #ffffff;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+
+      background: #ffffff;
+
+      box-shadow:
+        0 0 0 3px rgba(99, 102, 241, 0.12);
     }
 
-    .btn-adicionar {
+
+    /* ==============================
+       BOTÕES DO FORMULÁRIO
+    ============================== */
+
+    .botoes-formulario {
+      display: flex;
+      gap: 10px;
+
+      margin-top: 5px;
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+    .btn {
       border: none;
-      padding: 13px;
+
       border-radius: 10px;
-      background: #6366f1;
-      color: white;
-      font-size: 16px;
+
+      padding: 13px 18px;
+
+      font-size: 14px;
       font-weight: bold;
+
       cursor: pointer;
+
       transition: 0.2s;
     }
 
-    .btn-adicionar:hover {
-      background: #4f46e5;
+    .btn:hover {
       transform: translateY(-1px);
     }
 
-    #listaClientes {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+    .btn-principal {
+      flex: 1;
+
+      background: #6366f1;
+      color: #ffffff;
     }
 
-    #listaClientes li {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 16px;
+    .btn-principal:hover {
+      background: #4f46e5;
+    }
+
+    .btn-principal.editando {
+      background: #16a34a;
+    }
+
+    .btn-principal.editando:hover {
+      background: #15803d;
+    }
+
+    .btn-limpar {
+      background: #f1f5f9;
+      color: #475569;
+
+      border: 1px solid #cbd5e1;
+    }
+
+    .btn-limpar:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-cancelar {
+      background: #fff7ed;
+      color: #c2410c;
+
+      border: 1px solid #fed7aa;
+    }
+
+    .btn-cancelar:hover {
+      background: #ffedd5;
+    }
+
+
+    /* ==============================
+       CONTADOR
+    ============================== */
+
+    .contador-box {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 15px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #6366f1,
+          #4f46e5
+        );
+
+      color: white;
+
+      padding: 20px;
+
+      border-radius: 15px;
+
+      margin-bottom: 22px;
+
+      box-shadow:
+        0 8px 20px rgba(79, 70, 229, 0.20);
+    }
+
+    .contador-texto {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .contador-numero {
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+
+    /* ==============================
+       CONTROLES DA LISTA
+    ============================== */
+
+    .cabecalho-lista {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      margin-bottom: 18px;
+    }
+
+    .cabecalho-lista h2 {
+      font-size: 21px;
+      color: #334155;
+    }
+
+    .controles {
+      display: flex;
+      gap: 10px;
+
+      margin-bottom: 18px;
+    }
+
+    .campo-busca {
+      position: relative;
+      flex: 1;
+    }
+
+    .campo-busca span {
+      position: absolute;
+
+      left: 14px;
+      top: 50%;
+
+      transform: translateY(-50%);
+
+      font-size: 16px;
+    }
+
+    #busca {
+      width: 100%;
+
+      padding: 13px 15px 13px 42px;
+
+      border: 1px solid #cbd5e1;
+
+      border-radius: 10px;
+
+      background: #f8fafc;
+
+      font-size: 14px;
+
+      outline: none;
+    }
+
+    #busca:focus {
+      border-color: #6366f1;
+
+      background: #ffffff;
+
+      box-shadow:
+        0 0 0 3px rgba(99, 102, 241, 0.12);
+    }
+
+    .btn-ordenar {
+      border: none;
+
+      padding: 0 17px;
+
+      border-radius: 10px;
+
+      background: #e0e7ff;
+      color: #4338ca;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
       transition: 0.2s;
     }
 
-    #listaClientes li:hover {
-      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    .btn-ordenar:hover {
+      background: #c7d2fe;
+    }
+
+
+    /* ==============================
+       LISTA
+    ============================== */
+
+    #listaClientes {
+      list-style: none;
+
+      display: flex;
+      flex-direction: column;
+
+      gap: 12px;
+    }
+
+    .cliente {
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 15px;
+
+      padding: 17px;
+
+      background: #f8fafc;
+
+      border: 1px solid #e2e8f0;
+
+      border-radius: 12px;
+
+      transition: 0.2s;
+    }
+
+    .cliente:hover {
+      background: #ffffff;
+
       border-color: #c7d2fe;
+
+      box-shadow:
+        0 5px 15px rgba(15, 23, 42, 0.07);
     }
 
     .dados-cliente {
       flex: 1;
-      line-height: 1.6;
+      min-width: 0;
     }
 
-    .dados-cliente strong {
-      color: #1e293b;
+    .nome-cliente {
       font-size: 16px;
+
+      font-weight: bold;
+
+      color: #1e293b;
+
+      margin-bottom: 7px;
+
+      word-break: break-word;
     }
 
-    .dados-cliente span {
-      display: block;
+    .detalhe-cliente {
       color: #64748b;
-      font-size: 14px;
+
+      font-size: 13px;
+
+      margin-top: 4px;
+
+      word-break: break-word;
     }
+
+
+    /* ==============================
+       AÇÕES
+    ============================== */
 
     .acoes {
       display: flex;
       gap: 8px;
+
+      flex-shrink: 0;
     }
 
     .btn-editar,
     .btn-excluir {
       border: none;
-      padding: 8px 12px;
+
+      padding: 9px 12px;
+
       border-radius: 8px;
-      cursor: pointer;
+
+      font-size: 13px;
       font-weight: bold;
+
+      cursor: pointer;
+
       transition: 0.2s;
     }
 
@@ -160,15 +488,83 @@
       background: #fecaca;
     }
 
+
+    /* ==============================
+       LISTA VAZIA
+    ============================== */
+
     .lista-vazia {
       text-align: center;
+
+      padding: 25px;
+
       color: #94a3b8;
-      padding: 20px;
+
       border: 1px dashed #cbd5e1;
+
       border-radius: 10px;
+
+      background: #f8fafc;
     }
 
+
+    /* ==============================
+       TOAST
+    ============================== */
+
+    #toast {
+      position: fixed;
+
+      right: 25px;
+      bottom: 25px;
+
+      max-width: 360px;
+
+      padding: 14px 18px;
+
+      border-radius: 10px;
+
+      color: white;
+
+      font-size: 14px;
+      font-weight: bold;
+
+      opacity: 0;
+
+      transform: translateY(20px);
+
+      pointer-events: none;
+
+      transition: 0.3s;
+
+      z-index: 9999;
+    }
+
+    #toast.mostrar {
+      opacity: 1;
+
+      transform: translateY(0);
+    }
+
+    #toast.sucesso {
+      background: #16a34a;
+    }
+
+    #toast.erro {
+      background: #dc2626;
+    }
+
+    #toast.info {
+      background: #2563eb;
+    }
+
+
+    /* ==============================
+       RESPONSIVIDADE
+    ============================== */
+
     @media (max-width: 600px) {
+
       body {
         padding: 20px 12px;
       }
@@ -177,7 +573,28 @@
         padding: 20px;
       }
 
-      #listaClientes li {
+      .cabecalho h1 {
+        font-size: 27px;
+      }
+
+      .titulo-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .controles {
+        flex-direction: column;
+      }
+
+      .btn-ordenar {
+        padding: 12px;
+      }
+
+      .botoes-formulario {
+        flex-direction: column;
+      }
+
+      .cliente {
         flex-direction: column;
         align-items: stretch;
       }
@@ -190,136 +607,1175 @@
       .btn-excluir {
         flex: 1;
       }
+
+      #toast {
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+
+        max-width: none;
+      }
     }
+
   </style>
 </head>
+
 
 <body>
 
   <div class="container">
 
-    <div class="card">
-      <h2>Cadastro de Clientes</h2>
 
-      <div class="formulario">
-        <input id="nome" placeholder="Nome" />
-        <input id="endereco" placeholder="Endereço" />
-        <input id="telefone" placeholder="Telefone" />
+    <!-- ==============================
+         CABEÇALHO
+    ============================== -->
 
-        <button class="btn-adicionar" onclick="adicionarCliente()">
+    <header class="cabecalho">
+
+      <h1>Gestão de Clientes</h1>
+
+      <p>
+        Cadastro e gerenciamento de clientes
+      </p>
+
+    </header>
+
+
+    <!-- ==============================
+         FORMULÁRIO
+    ============================== -->
+
+    <section class="card">
+
+      <div class="titulo-card">
+
+        <h2 id="tituloFormulario">
           Adicionar Cliente
-        </button>
+        </h2>
+
+        <span
+          id="statusEdicao"
+          class="status-edicao"
+        >
+          ✏️ Editando cliente
+        </span>
+
       </div>
+
+
+      <form
+        id="formCliente"
+        class="formulario"
+      >
+
+        <div class="campo">
+
+          <label for="nome">
+            Nome
+          </label>
+
+          <input
+            id="nome"
+            type="text"
+            placeholder="Digite o nome"
+            autocomplete="off"
+          >
+
+        </div>
+
+
+        <div class="campo">
+
+          <label for="endereco">
+            Endereço
+          </label>
+
+          <input
+            id="endereco"
+            type="text"
+            placeholder="Digite o endereço"
+            autocomplete="off"
+          >
+
+        </div>
+
+
+        <div class="campo">
+
+          <label for="telefone">
+            Telefone
+          </label>
+
+          <input
+            id="telefone"
+            type="tel"
+            placeholder="Digite o telefone"
+            autocomplete="off"
+          >
+
+        </div>
+
+
+        <div class="botoes-formulario">
+
+          <button
+            type="submit"
+            id="btnPrincipal"
+            class="btn btn-principal"
+          >
+            + Adicionar Cliente
+          </button>
+
+
+          <button
+            type="button"
+            id="btnLimpar"
+            class="btn btn-limpar"
+          >
+            Limpar
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+
+    <!-- ==============================
+         CONTADOR
+    ============================== -->
+
+    <div class="contador-box">
+
+      <div class="contador-texto">
+        Total de clientes cadastrados
+      </div>
+
+      <div
+        id="contadorClientes"
+        class="contador-numero"
+      >
+        0
+      </div>
+
     </div>
 
-    <div class="card">
-      <h3>Lista de Clientes</h3>
+
+    <!-- ==============================
+         LISTA
+    ============================== -->
+
+    <section class="card">
+
+      <div class="cabecalho-lista">
+
+        <h2>
+          Lista de Clientes
+        </h2>
+
+      </div>
+
+
+      <div class="controles">
+
+        <div class="campo-busca">
+
+          <span>🔎</span>
+
+          <input
+            id="busca"
+            type="text"
+            placeholder="Buscar cliente pelo nome..."
+            autocomplete="off"
+          >
+
+        </div>
+
+
+        <button
+          type="button"
+          id="btnOrdenar"
+          class="btn-ordenar"
+        >
+          A-Z
+        </button>
+
+      </div>
+
 
       <ul id="listaClientes"></ul>
-    </div>
+
+    </section>
 
   </div>
 
-  <script>
-    function carregarClientes() {
-      const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
-      const lista = document.getElementById('listaClientes');
 
-      lista.innerHTML = '';
+  <!-- ==============================
+       MENSAGEM
+  ============================== -->
+
+  <div id="toast"></div>
+
+
+  <script>
+
+    /* =====================================================
+       ESTADO DA APLICAÇÃO
+    ===================================================== */
+
+    let clientes = [];
+
+    let idClienteEditando = null;
+
+
+    /* =====================================================
+       ELEMENTOS
+    ===================================================== */
+
+    const formCliente =
+      document.getElementById("formCliente");
+
+    const nomeInput =
+      document.getElementById("nome");
+
+    const enderecoInput =
+      document.getElementById("endereco");
+
+    const telefoneInput =
+      document.getElementById("telefone");
+
+    const listaClientes =
+      document.getElementById("listaClientes");
+
+    const buscaInput =
+      document.getElementById("busca");
+
+    const contadorClientes =
+      document.getElementById("contadorClientes");
+
+    const btnPrincipal =
+      document.getElementById("btnPrincipal");
+
+    const btnLimpar =
+      document.getElementById("btnLimpar");
+
+    const btnOrdenar =
+      document.getElementById("btnOrdenar");
+
+    const tituloFormulario =
+      document.getElementById("tituloFormulario");
+
+    const statusEdicao =
+      document.getElementById("statusEdicao");
+
+    const toast =
+      document.getElementById("toast");
+
+
+    /* =====================================================
+       CARREGAR CLIENTES
+    ===================================================== */
+
+    function carregarClientes() {
+
+      try {
+
+        const dados =
+          localStorage.getItem("clientes");
+
+        clientes =
+          dados ? JSON.parse(dados) : [];
+
+        /*
+         * Garante que clientes antigos,
+         * criados pela primeira versão,
+         * também funcionem.
+         */
+
+        let houveAlteracao = false;
+
+        clientes = clientes.map(cliente => {
+
+          if (!cliente.id) {
+
+            cliente.id =
+              gerarId();
+
+            houveAlteracao = true;
+          }
+
+          return cliente;
+
+        });
+
+
+        if (houveAlteracao) {
+          salvarNoStorage();
+        }
+
+      } catch (erro) {
+
+        console.error(
+          "Erro ao carregar clientes:",
+          erro
+        );
+
+        clientes = [];
+
+      }
+
+    }
+
+
+    /* =====================================================
+       GERAR ID ÚNICO
+    ===================================================== */
+
+    function gerarId() {
+
+      return (
+        Date.now().toString(36) +
+        Math.random()
+          .toString(36)
+          .substring(2, 9)
+      );
+
+    }
+
+
+    /* =====================================================
+       SALVAR NO LOCALSTORAGE
+    ===================================================== */
+
+    function salvarNoStorage() {
+
+      localStorage.setItem(
+        "clientes",
+        JSON.stringify(clientes)
+      );
+
+    }
+
+
+    /* =====================================================
+       RENDERIZAR TELA
+    ===================================================== */
+
+    function renderizar() {
+
+      renderizarLista();
+
+      atualizarContador();
+
+    }
+
+
+    /* =====================================================
+       CONTADOR
+    ===================================================== */
+
+    function atualizarContador() {
+
+      contadorClientes.textContent =
+        clientes.length;
+
+    }
+
+
+    /* =====================================================
+       RENDERIZAR LISTA
+    ===================================================== */
+
+    function renderizarLista() {
+
+      listaClientes.innerHTML = "";
+
+
+      const termo =
+        buscaInput.value
+          .trim()
+          .toLocaleLowerCase("pt-BR");
+
+
+      /*
+       * Filtra somente para exibição.
+       *
+       * O array original continua intacto.
+       */
+
+      const resultado =
+        clientes.filter(cliente => {
+
+          return cliente.nome
+            .toLocaleLowerCase("pt-BR")
+            .includes(termo);
+
+        });
+
+
+      /*
+       * Nenhum cliente cadastrado.
+       */
 
       if (clientes.length === 0) {
-        lista.innerHTML = `
-          <li class="lista-vazia">
-            Nenhum cliente cadastrado.
-          </li>
-        `;
+
+        mostrarListaVazia(
+          "Nenhum cliente cadastrado."
+        );
+
         return;
       }
 
-      clientes.forEach((cliente, index) => {
-        const item = document.createElement('li');
 
-        item.innerHTML = `
-          <div class="dados-cliente">
-            <strong>${cliente.nome}</strong>
-            <span>📍 ${cliente.endereco}</span>
-            <span>📞 ${cliente.telefone}</span>
-          </div>
+      /*
+       * Busca sem resultados.
+       */
 
-          <div class="acoes">
-            <button class="btn-editar" onclick="editarCliente(${index})">
-              Editar
-            </button>
+      if (resultado.length === 0) {
 
-            <button class="btn-excluir" onclick="excluirCliente(${index})">
-              Excluir
-            </button>
-          </div>
-        `;
+        mostrarListaVazia(
+          "Nenhum cliente encontrado."
+        );
 
-        lista.appendChild(item);
-      });
-    }
-
-    function adicionarCliente() {
-      const nome = document.getElementById('nome').value.trim();
-      const endereco = document.getElementById('endereco').value.trim();
-      const telefone = document.getElementById('telefone').value.trim();
-
-      if (!nome || !endereco || !telefone) {
-        alert('Preencha todos os campos.');
         return;
       }
 
-      const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
 
-      clientes.push({
-        nome,
-        endereco,
-        telefone
+      /*
+       * Cria os clientes.
+       */
+
+      resultado.forEach(cliente => {
+
+        const item =
+          document.createElement("li");
+
+        item.className =
+          "cliente";
+
+
+        /* DADOS */
+
+        const dados =
+          document.createElement("div");
+
+        dados.className =
+          "dados-cliente";
+
+
+        const nome =
+          document.createElement("div");
+
+        nome.className =
+          "nome-cliente";
+
+        nome.textContent =
+          cliente.nome;
+
+
+        const endereco =
+          document.createElement("div");
+
+        endereco.className =
+          "detalhe-cliente";
+
+        endereco.textContent =
+          "📍 " + cliente.endereco;
+
+
+        const telefone =
+          document.createElement("div");
+
+        telefone.className =
+          "detalhe-cliente";
+
+        telefone.textContent =
+          "📞 " + cliente.telefone;
+
+
+        dados.appendChild(nome);
+
+        dados.appendChild(endereco);
+
+        dados.appendChild(telefone);
+
+
+        /* AÇÕES */
+
+        const acoes =
+          document.createElement("div");
+
+        acoes.className =
+          "acoes";
+
+
+        const btnEditar =
+          document.createElement("button");
+
+        btnEditar.type =
+          "button";
+
+        btnEditar.className =
+          "btn-editar";
+
+        btnEditar.textContent =
+          "✏️ Editar";
+
+
+        btnEditar.addEventListener(
+          "click",
+          function() {
+
+            iniciarEdicao(
+              cliente.id
+            );
+
+          }
+        );
+
+
+        const btnExcluir =
+          document.createElement("button");
+
+        btnExcluir.type =
+          "button";
+
+        btnExcluir.className =
+          "btn-excluir";
+
+        btnExcluir.textContent =
+          "🗑 Excluir";
+
+
+        btnExcluir.addEventListener(
+          "click",
+          function() {
+
+            excluirCliente(
+              cliente.id
+            );
+
+          }
+        );
+
+
+        acoes.appendChild(btnEditar);
+
+        acoes.appendChild(btnExcluir);
+
+
+        item.appendChild(dados);
+
+        item.appendChild(acoes);
+
+
+        listaClientes.appendChild(item);
+
       });
 
-      localStorage.setItem('clientes', JSON.stringify(clientes));
-
-      limparFormulario();
-      carregarClientes();
     }
 
-    function excluirCliente(index) {
-      const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
 
-      clientes.splice(index, 1);
+    /* =====================================================
+       LISTA VAZIA
+    ===================================================== */
 
-      localStorage.setItem('clientes', JSON.stringify(clientes));
+    function mostrarListaVazia(mensagem) {
 
-      carregarClientes();
+      const item =
+        document.createElement("li");
+
+      item.className =
+        "lista-vazia";
+
+      item.textContent =
+        mensagem;
+
+      listaClientes.appendChild(item);
+
     }
 
-    function editarCliente(index) {
-      const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
-      const cliente = clientes[index];
 
-      document.getElementById('nome').value = cliente.nome;
-      document.getElementById('endereco').value = cliente.endereco;
-      document.getElementById('telefone').value = cliente.telefone;
+    /* =====================================================
+       ADICIONAR / SALVAR
+    ===================================================== */
 
-      clientes.splice(index, 1);
+    formCliente.addEventListener(
+      "submit",
+      function(event) {
 
-      localStorage.setItem('clientes', JSON.stringify(clientes));
+        event.preventDefault();
 
-      carregarClientes();
+        const nome =
+          nomeInput.value.trim();
 
-      document.getElementById('nome').focus();
+        const endereco =
+          enderecoInput.value.trim();
+
+        const telefone =
+          telefoneInput.value.trim();
+
+
+        /*
+         * Validação
+         */
+
+        if (
+          !nome ||
+          !endereco ||
+          !telefone
+        ) {
+
+          mostrarMensagem(
+            "Preencha todos os campos.",
+            "erro"
+          );
+
+          return;
+        }
+
+
+        /*
+         * ==============================================
+         * MODO EDIÇÃO
+         * ==============================================
+         */
+
+        if (idClienteEditando !== null) {
+
+          const indice =
+            clientes.findIndex(
+              cliente =>
+                cliente.id ===
+                idClienteEditando
+            );
+
+
+          /*
+           * Cliente não encontrado.
+           */
+
+          if (indice === -1) {
+
+            cancelarEdicao();
+
+            mostrarMensagem(
+              "Não foi possível encontrar o cliente.",
+              "erro"
+            );
+
+            return;
+          }
+
+
+          /*
+           * Atualiza o MESMO cliente.
+           */
+
+          clientes[indice].nome =
+            nome;
+
+          clientes[indice].endereco =
+            endereco;
+
+          clientes[indice].telefone =
+            telefone;
+
+
+          salvarNoStorage();
+
+
+          mostrarMensagem(
+            "Cliente atualizado com sucesso!",
+            "sucesso"
+          );
+
+
+          cancelarEdicao(false);
+
+          renderizar();
+
+          return;
+        }
+
+
+        /*
+         * ==============================================
+         * MODO ADIÇÃO
+         * ==============================================
+         */
+
+        const novoCliente = {
+
+          id: gerarId(),
+
+          nome: nome,
+
+          endereco: endereco,
+
+          telefone: telefone
+
+        };
+
+
+        clientes.push(novoCliente);
+
+
+        salvarNoStorage();
+
+
+        mostrarMensagem(
+          "Cliente adicionado com sucesso!",
+          "sucesso"
+        );
+
+
+        limparCampos();
+
+        renderizar();
+
+      }
+    );
+
+
+    /* =====================================================
+       INICIAR EDIÇÃO
+    ===================================================== */
+
+    function iniciarEdicao(id) {
+
+      const cliente =
+        clientes.find(
+          cliente =>
+            cliente.id === id
+        );
+
+
+      if (!cliente) {
+
+        mostrarMensagem(
+          "Cliente não encontrado.",
+          "erro"
+        );
+
+        return;
+      }
+
+
+      /*
+       * Guarda o ID, não o índice.
+       */
+
+      idClienteEditando =
+        cliente.id;
+
+
+      /*
+       * Preenche formulário.
+       */
+
+      nomeInput.value =
+        cliente.nome;
+
+      enderecoInput.value =
+        cliente.endereco;
+
+      telefoneInput.value =
+        cliente.telefone;
+
+
+      /*
+       * Muda interface.
+       */
+
+      tituloFormulario.textContent =
+        "Editar Cliente";
+
+
+      statusEdicao.classList.add(
+        "ativo"
+      );
+
+
+      btnPrincipal.textContent =
+        "✓ Salvar Alterações";
+
+
+      btnPrincipal.classList.add(
+        "editando"
+      );
+
+
+      /*
+       * Mostra botão cancelar.
+       */
+
+      criarBotaoCancelar();
+
+
+      /*
+       * Foco.
+       */
+
+      nomeInput.focus();
+
+
+      /*
+       * Feedback.
+       */
+
+      mostrarMensagem(
+        "Cliente carregado para edição.",
+        "info"
+      );
+
+
+      /*
+       * Rola até o formulário.
+       */
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
     }
 
-    function limparFormulario() {
-      document.getElementById('nome').value = '';
-      document.getElementById('endereco').value = '';
-      document.getElementById('telefone').value = '';
+
+    /* =====================================================
+       CRIAR BOTÃO CANCELAR
+    ===================================================== */
+
+    function criarBotaoCancelar() {
+
+      if (
+        document.getElementById(
+          "btnCancelar"
+        )
+      ) {
+        return;
+      }
+
+
+      const botao =
+        document.createElement("button");
+
+      botao.id =
+        "btnCancelar";
+
+      botao.type =
+        "button";
+
+      botao.className =
+        "btn btn-cancelar";
+
+      botao.textContent =
+        "Cancelar Edição";
+
+
+      botao.addEventListener(
+        "click",
+        function() {
+
+          cancelarEdicao();
+
+        }
+      );
+
+
+      document
+        .querySelector(".botoes-formulario")
+        .appendChild(botao);
+
     }
+
+
+    /* =====================================================
+       CANCELAR EDIÇÃO
+    ===================================================== */
+
+    function cancelarEdicao(
+      mostrarToast = true
+    ) {
+
+      idClienteEditando = null;
+
+
+      limparCampos();
+
+
+      tituloFormulario.textContent =
+        "Adicionar Cliente";
+
+
+      statusEdicao.classList.remove(
+        "ativo"
+      );
+
+
+      btnPrincipal.textContent =
+        "+ Adicionar Cliente";
+
+
+      btnPrincipal.classList.remove(
+        "editando"
+      );
+
+
+      const btnCancelar =
+        document.getElementById(
+          "btnCancelar"
+        );
+
+
+      if (btnCancelar) {
+        btnCancelar.remove();
+      }
+
+
+      if (mostrarToast) {
+
+        mostrarMensagem(
+          "Edição cancelada.",
+          "info"
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       EXCLUIR CLIENTE
+    ===================================================== */
+
+    function excluirCliente(id) {
+
+      const cliente =
+        clientes.find(
+          cliente =>
+            cliente.id === id
+        );
+
+
+      if (!cliente) {
+
+        mostrarMensagem(
+          "Cliente não encontrado.",
+          "erro"
+        );
+
+        return;
+      }
+
+
+      /*
+       * Confirmação.
+       */
+
+      const confirmou =
+        window.confirm(
+          `Tem certeza que deseja excluir "${cliente.nome}"?`
+        );
+
+
+      if (!confirmou) {
+
+        return;
+
+      }
+
+
+      /*
+       * Remove pelo ID.
+       */
+
+      clientes =
+        clientes.filter(
+          cliente =>
+            cliente.id !== id
+        );
+
+
+      /*
+       * Se estava editando esse cliente,
+       * cancela a edição.
+       */
+
+      if (
+        idClienteEditando === id
+      ) {
+
+        cancelarEdicao(false);
+
+      }
+
+
+      salvarNoStorage();
+
+      renderizar();
+
+
+      mostrarMensagem(
+        "Cliente excluído com sucesso!",
+        "sucesso"
+      );
+
+    }
+
+
+    /* =====================================================
+       ORDENAR A-Z
+    ===================================================== */
+
+    btnOrdenar.addEventListener(
+      "click",
+      function() {
+
+        clientes.sort(
+          function(a, b) {
+
+            return a.nome.localeCompare(
+              b.nome,
+              "pt-BR",
+              {
+                sensitivity: "base"
+              }
+            );
+
+          }
+        );
+
+
+        salvarNoStorage();
+
+        renderizar();
+
+
+        mostrarMensagem(
+          "Clientes ordenados de A-Z.",
+          "info"
+        );
+
+      }
+    );
+
+
+    /* =====================================================
+       BUSCA EM TEMPO REAL
+    ===================================================== */
+
+    buscaInput.addEventListener(
+      "input",
+      function() {
+
+        renderizarLista();
+
+      }
+    );
+
+
+    /* =====================================================
+       LIMPAR
+    ===================================================== */
+
+    btnLimpar.addEventListener(
+      "click",
+      function() {
+
+        /*
+         * Se estiver editando,
+         * cancelar a edição.
+         */
+
+        if (
+          idClienteEditando !== null
+        ) {
+
+          cancelarEdicao();
+
+          return;
+        }
+
+
+        limparCampos();
+
+
+        nomeInput.focus();
+
+
+        mostrarMensagem(
+          "Formulário limpo.",
+          "info"
+        );
+
+      }
+    );
+
+
+    /* =====================================================
+       LIMPAR CAMPOS
+    ===================================================== */
+
+    function limparCampos() {
+
+      nomeInput.value = "";
+
+      enderecoInput.value = "";
+
+      telefoneInput.value = "";
+
+    }
+
+
+    /* =====================================================
+       MENSAGEM TOAST
+    ===================================================== */
+
+    let timerToast = null;
+
+
+    function mostrarMensagem(
+      mensagem,
+      tipo
+    ) {
+
+      clearTimeout(timerToast);
+
+
+      toast.textContent =
+        mensagem;
+
+
+      toast.className =
+        "mostrar " + tipo;
+
+
+      timerToast =
+        setTimeout(
+          function() {
+
+            toast.className = "";
+
+          },
+          3000
+        );
+
+    }
+
+
+    /* =====================================================
+       INICIALIZAÇÃO
+    ===================================================== */
 
     carregarClientes();
+
+    renderizar();
+
   </script>
 
 </body>
+
 </html>
+
